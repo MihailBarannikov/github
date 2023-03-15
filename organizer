@@ -1,0 +1,36 @@
+import os
+import shutil
+import datetime
+
+src_dir = "C:/Users/mihail/Downloads/"
+dest_dir = "C:/Users/mihail/Documents/Organized/"
+
+# Define the categories and corresponding subfolder names
+categories = {
+    ".txt": "Text",
+    ".docx": "Word",
+    ".pdf": "PDF",
+    ".jpg": "Images",
+    ".png": "Images",
+    ".xlsx": "Excel"
+}
+
+# Create the day folders and category subfolders
+days = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]
+for day in days:
+    day_folder = os.path.join(dest_dir, day)
+    os.makedirs(day_folder, exist_ok=True)
+    for category in categories.values():
+        cat_folder = os.path.join(day_folder, category)
+        os.makedirs(cat_folder, exist_ok=True)
+
+# Move files from the source directory to the appropriate subfolder
+today = datetime.datetime.today().strftime('%A')
+for filename in os.listdir(src_dir):
+    src_path = os.path.join(src_dir, filename)
+    if os.path.isfile(src_path):
+        ext = os.path.splitext(filename)[1]
+        category = categories.get(ext)
+        if category:
+            dest_path = os.path.join(dest_dir, today, category, filename)
+            shutil.move(src_path, dest_path)
